@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FF6B9D">
+    <meta name="description" content="Konuşuyorum - Konuşamayan çocuklar için sesli iletişim uygulaması">
+    <title>Konuşuyorum 🎤</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Trebuchet MS', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin: 20px 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Person Selector Screen */
+        .person-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .person-card {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF8E72 100%);
+            border: 4px solid #FF1493;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .person-card:active {
+            transform: scale(0.95);
+        }
+
+        .person-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .category-card {
+            border: 4px solid #333;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .category-card:active {
+            transform: scale(0.95);
+        }
+
+        /* Word Grid */
+        .word-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .word-card {
+            background: white;
+            border: 4px solid #333;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .word-card:active {
+            transform: scale(0.95);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .word-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+            word-break: break-word;
+        }
+
+        .word-image {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .speak-btn {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF8E72 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .speak-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00D4FF 0%, #0099FF 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00FF88 0%, #00CC66 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF4444 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #FFB366 0%, #FF8C42 100%);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            border: 3px solid #ddd;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+        }
+
+        /* Back Button */
+        .back-btn {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF8E72 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header {
+                font-size: 2em;
+            }
+
+            .person-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .word-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .btn {
+                min-width: 80px;
+                padding: 12px 15px;
+                font-size: 1em;
+            }
+        }
+
+        .delete-btn {
+            background: #FF4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .delete-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">🎤 Konuşuyorum</div>
+
+        <!-- Person Selector Screen -->
+        <div id="personScreen" class="screen active">
+            <div class="button-group">
+                <button class="btn btn-success" onclick="openPersonModal()">➕ Yeni Kişi Ekle</button>
+            </div>
+            <div id="personGrid" class="person-grid"></div>
+            <div id="emptyPersons" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">👤</div>
+                <div>Henüz kişi eklenmemiş. Yeni kişi eklemek için butona basın!</div>
+            </div>
+        </div>
+
+        <!-- Category Screen -->
+        <div id="categoryScreen" class="screen">
+            <button class="back-btn" onclick="goToPerson()">⬅️ Geri Dön</button>
+            <div class="button-group">
+                <button class="btn btn-success" onclick="openCategoryModal()">➕ Kategori Ekle</button>
+            </div>
+            <div id="categoryGrid" class="category-grid"></div>
+            <div id="emptyCategories" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">📂</div>
+                <div>Henüz kategori eklenmemiş. Yeni kategori eklemek için butona basın!</div>
+            </div>
+        </div>
+
+        <!-- Word Screen -->
+        <div id="wordScreen" class="screen">
+            <button class="back-btn" onclick="goToCategory()">⬅️ Geri Dön</button>
+            <div class="button-group">
+                <button class="btn btn-success" onclick="openWordModal()">➕ Kelime/Cümle Ekle</button>
+            </div>
+            <div id="wordGrid" class="word-grid"></div>
+            <div id="emptyWords" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">📝</div>
+                <div>Henüz kelime eklenmemiş. Yeni kelime eklemek için butona basın!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Person Modal -->
+    <div id="personModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">➕ Yeni Kişi Ekle</div>
+            <div class="form-group">
+                <label>Kişi Adı:</label>
+                <input type="text" id="personName" placeholder="Örn: Ahmet">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-success" onclick="savePerson()">Kaydet</button>
+                <button class="btn btn-danger" onclick="closeModal('personModal')">İptal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">➕ Kategori Ekle</div>
+            <div class="form-group">
+                <label>Kategori Adı:</label>
+                <input type="text" id="categoryName" placeholder="Örn: Meyve">
+            </div>
+            <div class="form-group">
+                <label>Renk Seç:</label>
+                <div class="color-picker">
+                    <div class="color-option selected" style="background: linear-gradient(135deg, #FF6B9D 0%, #FF8E72 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #FF6B9D 0%, #FF8E72 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #00D4FF 0%, #0099FF 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #00D4FF 0%, #0099FF 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #00FF88 0%, #00CC66 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #00FF88 0%, #00CC66 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #FFB366 0%, #FF8C42 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #FFB366 0%, #FF8C42 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF4444 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #FF6B6B 0%, #FF4444 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #9D4EDD 0%, #5A189A 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #9D4EDD 0%, #5A189A 100%)')"></div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-success" onclick="saveCategory()">Kaydet</button>
+                <button class="btn btn-danger" onclick="closeModal('categoryModal')">İptal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Word Modal -->
+    <div id="wordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">➕ Kelime/Cümle Ekle</div>
+            <div class="form-group">
+                <label>Kelime/Cümle:</label>
+                <textarea id="wordText" placeholder="Örn: Merhaba"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Fotoğraf (isteğe bağlı):</label>
+                <input type="file" id="wordImage" accept="image/*">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-success" onclick="saveWord()">Kaydet</button>
+                <button class="btn btn-danger" onclick="closeModal('wordModal')">İptal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPerson = null;
+        let currentCategory = null;
+        let selectedColor = 'linear-gradient(135deg, #FF6B9D 0%, #FF8E72 100%)';
+
+        // Initialize
+        function init() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            }
+            renderPersons();
+        }
+
+        // Data Management
+        function getData() {
+            return JSON.parse(localStorage.getItem('konusuyorum') || '{"persons":[]}');
+        }
+
+        function saveData(data) {
+            localStorage.setItem('konusuyorum', JSON.stringify(data));
+        }
+
+        // Person Functions
+        function renderPersons() {
+            const data = getData();
+            const grid = document.getElementById('personGrid');
+            const empty = document.getElementById('emptyPersons');
+
+            grid.innerHTML = '';
+
+            if (data.persons.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+
+            data.persons.forEach((person, idx) => {
+                const card = document.createElement('div');
+                card.className = 'person-card';
+                card.innerHTML = `
+                    <div>${person.name}</div>
+                    <button class="delete-btn" onclick="deletePerson(${idx})">Sil</button>
+                `;
+                card.onclick = (e) => {
+                    if (e.target.className !== 'delete-btn') {
+                        selectPerson(idx);
+                    }
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        function selectPerson(idx) {
+            const data = getData();
+            currentPerson = idx;
+            showScreen('categoryScreen');
+            renderCategories();
+        }
+
+        function deletePerson(idx) {
+            if (confirm('Bu kişiyi silmek istediğinizden emin misiniz?')) {
+                const data = getData();
+                data.persons.splice(idx, 1);
+                saveData(data);
+                renderPersons();
+            }
+        }
+
+        function openPersonModal() {
+            document.getElementById('personName').value = '';
+            document.getElementById('personModal').classList.add('active');
+        }
+
+        function savePerson() {
+            const name = document.getElementById('personName').value.trim();
+            if (!name) {
+                alert('Lütfen kişi adı girin!');
+                return;
+            }
+
+            const data = getData();
+            data.persons.push({ name, categories: [] });
+            saveData(data);
+            closeModal('personModal');
+            renderPersons();
+        }
+
+        // Category Functions
+        function renderCategories() {
+            const data = getData();
+            const person = data.persons[currentPerson];
+            const grid = document.getElementById('categoryGrid');
+            const empty = document.getElementById('emptyCategories');
+
+            grid.innerHTML = '';
+
+            if (!person || person.categories.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+
+            person.categories.forEach((cat, idx) => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.style.background = cat.color;
+                card.innerHTML = `
+                    <div>${cat.name}</div>
+                    <button class="delete-btn" onclick="deleteCategory(${idx})">Sil</button>
+                `;
+                card.onclick = (e) => {
+                    if (e.target.className !== 'delete-btn') {
+                        selectCategory(idx);
+                    }
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        function selectCategory(idx) {
+            currentCategory = idx;
+            showScreen('wordScreen');
+            renderWords();
+        }
+
+        function deleteCategory(idx) {
+            if (confirm('Bu kategoriyi silmek istediğinizden emin misiniz?')) {
+                const data = getData();
+                data.persons[currentPerson].categories.splice(idx, 1);
+                saveData(data);
+                renderCategories();
+            }
+        }
+
+        function openCategoryModal() {
+            document.getElementById('categoryName').value = '';
+            selectedColor = 'linear-gradient(135deg, #FF6B9D 0%, #FF8E72 100%)';
+            document.querySelectorAll('.color-option').forEach((el, idx) => {
+                el.classList.toggle('selected', idx === 0);
+            });
+            document.getElementById('categoryModal').classList.add('active');
+        }
+
+        function selectColor(el, color) {
+            document.querySelectorAll('.color-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedColor = color;
+        }
+
+        function saveCategory() {
+            const name = document.getElementById('categoryName').value.trim();
+            if (!name) {
+                alert('Lütfen kategori adı girin!');
+                return;
+            }
+
+            const data = getData();
+            data.persons[currentPerson].categories.push({
+                name,
+                color: selectedColor,
+                words: []
+            });
+            saveData(data);
+            closeModal('categoryModal');
+            renderCategories();
+        }
+
+        // Word Functions
+        function renderWords() {
+            const data = getData();
+            const category = data.persons[currentPerson].categories[currentCategory];
+            const grid = document.getElementById('wordGrid');
+            const empty = document.getElementById('emptyWords');
+
+            grid.innerHTML = '';
+
+            if (!category || category.words.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+
+            category.words.forEach((word, idx) => {
+                const card = document.createElement('div');
+                card.className = 'word-card';
+                card.innerHTML = `
+                    <div class="word-text">${word.text}</div>
+                    ${word.image ? `<img src="${word.image}" class="word-image">` : ''}
+                    <button class="speak-btn" onclick="speakWord('${word.text.replace(/'/g, "\\'")}')">🔊 Oku</button>
+                    <button class="delete-btn" onclick="deleteWord(${idx})">Sil</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function speakWord(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'tr-TR';
+            utterance.rate = 0.9;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function deleteWord(idx) {
+            if (confirm('Bu kelimeyi silmek istediğinizden emin misiniz?')) {
+                const data = getData();
+                data.persons[currentPerson].categories[currentCategory].words.splice(idx, 1);
+                saveData(data);
+                renderWords();
+            }
+        }
+
+        function openWordModal() {
+            document.getElementById('wordText').value = '';
+            document.getElementById('wordImage').value = '';
+            document.getElementById('wordModal').classList.add('active');
+        }
+
+        function saveWord() {
+            const text = document.getElementById('wordText').value.trim();
+            if (!text) {
+                alert('Lütfen kelime/cümle girin!');
+                return;
+            }
+
+            const fileInput = document.getElementById('wordImage');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    addWordToData(text, e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                addWordToData(text, null);
+            }
+        }
+
+        function addWordToData(text, image) {
+            const data = getData();
+            data.persons[currentPerson].categories[currentCategory].words.push({
+                text,
+                image
+            });
+            saveData(data);
+            closeModal('wordModal');
+            renderWords();
+        }
+
+        // Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function goToPerson() {
+            showScreen('personScreen');
+            renderPersons();
+        }
+
+        function goToCategory() {
+            showScreen('categoryScreen');
+            renderCategories();
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // Initialize on load
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
