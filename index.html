@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#FF6B6B">
-    <meta name="description" content="Konuşuyorum - Konuşamayan çocuklar için sesli iletişim uygulaması">
+    <meta name="theme-color" content="#6366f1">
     <title>Konuşuyorum 🎤</title>
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,249 +15,136 @@
         }
 
         body {
-            font-family: 'Fredoka', sans-serif;
-            background: linear-gradient(45deg, #FF6B6B, #FFE66D, #4ECDC4, #FF6B6B, #FFE66D, #4ECDC4);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 10px;
-            overflow-x: hidden;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            padding: 15px;
+            color: #333;
         }
 
         .container {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .header {
             text-align: center;
-            color: white;
-            margin: 25px 0 35px 0;
-            font-size: 3.5em;
-            text-shadow: 4px 4px 0px rgba(0,0,0,0.2), 8px 8px 0px rgba(255,255,255,0.3);
+            margin: 30px 0;
+            font-size: 3em;
             font-weight: 800;
-            letter-spacing: 3px;
-            animation: wiggle 2s ease-in-out infinite;
-            transform: rotate(-2deg);
-        }
-
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-2deg) translateY(0); }
-            25% { transform: rotate(2deg) translateY(-5px); }
-            50% { transform: rotate(-2deg) translateY(0); }
-            75% { transform: rotate(2deg) translateY(-5px); }
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .screen {
             display: none;
-            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation: fadeIn 0.4s ease-in;
         }
 
         .screen.active {
             display: block;
         }
 
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        /* Person Selector Screen */
-        .person-grid {
+        /* Grid Layouts */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 25px;
-            margin: 25px 0;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
         }
 
-        .person-card {
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%);
-            border: 5px solid #FF4757;
-            border-radius: 35px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            min-height: 150px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5em;
-            color: white;
-            font-weight: 800;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25), inset -3px -3px 0px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .person-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
-            transition: all 0.6s;
-        }
-
-        .person-card:hover {
-            transform: translateY(-15px) scale(1.08) rotate(3deg);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.35), inset -3px -3px 0px rgba(0,0,0,0.1);
-        }
-
-        .person-card:active {
-            transform: scale(0.92) rotate(-2deg);
-        }
-
-        /* Category Grid */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 18px;
-            margin: 25px 0;
-        }
-
-        .category-card {
-            border: 5px solid #333;
-            border-radius: 30px;
+        .card {
+            background: white;
+            border-radius: 20px;
             padding: 25px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 3px solid transparent;
             min-height: 140px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 1.3em;
-            font-weight: 800;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .card:active {
+            transform: scale(0.95);
+        }
+
+        .card.person {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2), inset -3px -3px 0px rgba(0,0,0,0.15);
-            position: relative;
-            overflow: hidden;
+            border-color: #667eea;
         }
 
-        .category-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+        .card.category {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-color: #f5576c;
         }
 
-        .category-card:hover {
-            transform: translateY(-12px) scale(1.1) rotate(5deg);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3), inset -3px -3px 0px rgba(0,0,0,0.15);
-        }
-
-        .category-card:active {
-            transform: scale(0.92);
-        }
-
-        /* Word Grid */
-        .word-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 20px;
-            margin: 25px 0;
-        }
-
-        .word-card {
+        .card.word {
             background: white;
-            border: 5px solid #FF6B6B;
-            border-radius: 30px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            min-height: 220px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15), inset -3px -3px 0px rgba(255,107,107,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .word-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #FF6B6B, #FFE66D, #4ECDC4, #FF6B6B);
-            background-size: 200% 100%;
-            animation: slideGradient 3s ease infinite;
-        }
-
-        @keyframes slideGradient {
-            0%, 100% { background-position: 0% 0%; }
-            50% { background-position: 100% 0%; }
-        }
-
-        .word-card:hover {
-            transform: translateY(-15px) scale(1.08) rotate(2deg);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25), inset -3px -3px 0px rgba(255,107,107,0.15);
-        }
-
-        .word-card:active {
-            transform: scale(0.92);
-        }
-
-        .word-text {
-            font-size: 1.5em;
-            font-weight: 800;
-            color: #FF6B6B;
-            margin: 10px 0;
-            word-break: break-word;
-            line-height: 1.3;
-            text-shadow: 1px 1px 0px rgba(255,107,107,0.2);
+            border: 3px solid #667eea;
+            color: #333;
         }
 
         .word-image {
             width: 100%;
             height: 100px;
             object-fit: cover;
-            border-radius: 15px;
+            border-radius: 12px;
             margin: 10px 0;
-            border: 4px solid #FFE66D;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 2px solid #667eea;
         }
 
-        .speak-btn {
-            background: linear-gradient(135deg, #FFE66D 0%, #FFD93D 100%);
-            color: #333;
-            border: 4px solid #FF6B6B;
-            border-radius: 20px;
-            padding: 14px 20px;
-            font-size: 1.2em;
+        .word-text {
+            font-size: 1.3em;
             font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            width: 100%;
-            box-shadow: 0 6px 15px rgba(255,230,109,0.3);
-            font-family: 'Fredoka', sans-serif;
+            color: #667eea;
+            margin: 10px 0;
+            word-break: break-word;
+            line-height: 1.3;
         }
 
-        .speak-btn:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(255,230,109,0.4);
+        .word-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
         }
 
-        .speak-btn:active {
-            transform: scale(0.95);
+        .word-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 3px solid #667eea;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .word-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
         }
 
         /* Buttons */
@@ -271,61 +157,67 @@
 
         .btn {
             flex: 1;
-            min-width: 120px;
-            padding: 18px 28px;
-            font-size: 1.2em;
-            font-weight: 800;
-            border: 4px solid #333;
-            border-radius: 25px;
+            min-width: 140px;
+            padding: 16px 24px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border: none;
+            border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.3s ease;
             color: white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2), inset -3px -3px 0px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-            font-family: 'Fredoka', sans-serif;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.3);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #95E1D3 0%, #38ADA9 100%);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #FFE66D 0%, #FFD93D 100%);
-            color: #333;
-            border-color: #FF6B6B;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            font-family: 'Poppins', sans-serif;
         }
 
         .btn:hover {
-            transform: translateY(-6px) scale(1.05);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.3), inset -3px -3px 0px rgba(0,0,0,0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
 
         .btn:active {
-            transform: scale(0.92);
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .speak-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            font-family: 'Poppins', sans-serif;
+            margin-top: 10px;
+        }
+
+        .speak-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .speak-btn:active {
+            transform: scale(0.95);
         }
 
         /* Modal */
@@ -337,8 +229,8 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.4);
-            animation: fadeIn 0.3s ease-in;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
             backdrop-filter: blur(5px);
         }
 
@@ -348,103 +240,95 @@
             align-items: center;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .modal-content {
-            background: linear-gradient(135deg, #FFFFFF 0%, #FFF5E6 100%);
+            background: white;
             padding: 40px;
-            border-radius: 35px;
+            border-radius: 25px;
             max-width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3), inset -3px -3px 0px rgba(0,0,0,0.05);
-            border: 5px solid #FF6B6B;
-            animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 3px solid #667eea;
+            animation: slideUp 0.4s ease;
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(60px) scale(0.9);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateY(0);
             }
         }
 
         .modal-header {
-            font-size: 2.2em;
+            font-size: 2em;
             font-weight: 800;
             margin-bottom: 30px;
-            color: #FF6B6B;
-            text-shadow: 2px 2px 0px rgba(255,107,107,0.2);
+            color: #667eea;
         }
 
         .form-group {
-            margin: 25px 0;
+            margin: 20px 0;
         }
 
         .form-group label {
             display: block;
-            font-weight: 800;
-            margin-bottom: 12px;
-            font-size: 1.2em;
-            color: #FF6B6B;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #667eea;
         }
 
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 16px;
-            border: 4px solid #FF6B6B;
-            border-radius: 20px;
-            font-size: 1.1em;
-            font-family: 'Fredoka', sans-serif;
-            transition: all 0.3s;
-            background: #FFFAF0;
+            padding: 14px;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            font-size: 1em;
+            font-family: 'Poppins', sans-serif;
             font-weight: 600;
+            transition: all 0.3s;
         }
 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #FFE66D;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(255,230,109,0.3);
-            transform: scale(1.02);
+            border-color: #f5576c;
+            box-shadow: 0 0 0 3px rgba(245,87,108,0.1);
+            transform: scale(1.01);
         }
 
         .form-group textarea {
             resize: vertical;
-            min-height: 110px;
+            min-height: 100px;
         }
 
         .color-picker {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
         .color-option {
-            width: 70px;
-            height: 70px;
-            border-radius: 18px;
-            border: 5px solid #333;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            border: 4px solid transparent;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .color-option.selected {
-            border-color: #FF6B6B;
-            transform: scale(1.25) rotate(8deg);
-            box-shadow: 0 8px 25px rgba(255,107,107,0.4);
+            border-color: #333;
+            transform: scale(1.15);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         }
 
         .modal-buttons {
@@ -457,131 +341,111 @@
             flex: 1;
         }
 
-        /* Back Button */
         .back-btn {
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: 4px solid #FF4757;
-            border-radius: 25px;
-            padding: 16px 26px;
-            font-size: 1.2em;
-            font-weight: 800;
+            border: none;
+            border-radius: 15px;
+            padding: 14px 24px;
+            font-size: 1.1em;
+            font-weight: 700;
             cursor: pointer;
             margin-bottom: 20px;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 8px 20px rgba(255,107,107,0.3);
-            font-family: 'Fredoka', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            font-family: 'Poppins', sans-serif;
         }
 
         .back-btn:hover {
-            transform: translateY(-6px) scale(1.05);
-            box-shadow: 0 12px 30px rgba(255,107,107,0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
 
         .back-btn:active {
-            transform: scale(0.92);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: white;
-            font-size: 1.4em;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .empty-state-icon {
-            font-size: 6em;
-            margin-bottom: 25px;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-30px); }
-        }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            .header {
-                font-size: 2.5em;
-                margin: 15px 0 20px 0;
-            }
-
-            .person-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-
-            .category-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .word-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .btn {
-                min-width: 100px;
-                padding: 14px 18px;
-                font-size: 1em;
-            }
-
-            .modal-content {
-                padding: 25px;
-                border-radius: 25px;
-            }
-
-            .modal-header {
-                font-size: 1.8em;
-            }
+            transform: scale(0.95);
         }
 
         .delete-btn {
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%);
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
             color: white;
-            border: 3px solid #FF4757;
-            border-radius: 12px;
+            border: none;
+            border-radius: 10px;
             padding: 8px 14px;
-            font-size: 1em;
+            font-size: 0.95em;
             cursor: pointer;
             margin-top: 8px;
             font-weight: 700;
             transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(255,107,107,0.2);
-            font-family: 'Fredoka', sans-serif;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-family: 'Poppins', sans-serif;
         }
 
         .delete-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(255,107,107,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         }
 
         .delete-btn:active {
             transform: scale(0.95);
         }
 
-        /* Scrollbar styling */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .empty-state-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                font-size: 2em;
+                margin: 20px 0;
+            }
+
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                margin: 20px 0;
+            }
+
+            .word-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .btn {
+                min-width: 100px;
+                padding: 12px 16px;
+                font-size: 1em;
+            }
+
+            .modal-content {
+                padding: 25px;
+                border-radius: 15px;
+            }
+
+            .modal-header {
+                font-size: 1.6em;
+            }
+        }
+
         ::-webkit-scrollbar {
-            width: 12px;
+            width: 10px;
         }
 
         ::-webkit-scrollbar-track {
-            background: linear-gradient(135deg, #FFE66D, #4ECDC4);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #FF6B6B, #FF8E72);
-            border-radius: 10px;
-            border: 2px solid white;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #FF4757, #FF6B6B);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -589,41 +453,41 @@
     <div class="container">
         <div class="header">🎤 Konuşuyorum</div>
 
-        <!-- Person Selector Screen -->
+        <!-- Person Screen -->
         <div id="personScreen" class="screen active">
             <div class="button-group">
-                <button class="btn btn-success" onclick="openPersonModal()">➕ Yeni Kişi Ekle</button>
+                <button class="btn btn-success" onclick="openPersonModal()">➕ Yeni Kişi</button>
             </div>
-            <div id="personGrid" class="person-grid"></div>
+            <div id="personGrid" class="grid"></div>
             <div id="emptyPersons" class="empty-state" style="display: none;">
                 <div class="empty-state-icon">👤</div>
-                <div>Henüz kişi eklenmemiş! 🎉<br>Yeni kişi eklemek için butona basın!</div>
+                <div>Henüz kişi eklenmemiş!</div>
             </div>
         </div>
 
         <!-- Category Screen -->
         <div id="categoryScreen" class="screen">
-            <button class="back-btn" onclick="goToPerson()">⬅️ Geri Dön</button>
+            <button class="back-btn" onclick="goToPerson()">⬅️ Geri</button>
             <div class="button-group">
                 <button class="btn btn-success" onclick="openCategoryModal()">➕ Kategori Ekle</button>
             </div>
-            <div id="categoryGrid" class="category-grid"></div>
+            <div id="categoryGrid" class="grid"></div>
             <div id="emptyCategories" class="empty-state" style="display: none;">
                 <div class="empty-state-icon">📂</div>
-                <div>Henüz kategori eklenmemiş! 🎨<br>Yeni kategori eklemek için butona basın!</div>
+                <div>Henüz kategori eklenmemiş!</div>
             </div>
         </div>
 
         <!-- Word Screen -->
         <div id="wordScreen" class="screen">
-            <button class="back-btn" onclick="goToCategory()">⬅️ Geri Dön</button>
+            <button class="back-btn" onclick="goToCategory()">⬅️ Geri</button>
             <div class="button-group">
-                <button class="btn btn-success" onclick="openWordModal()">➕ Kelime/Cümle Ekle</button>
+                <button class="btn btn-success" onclick="openWordModal()">➕ Kelime Ekle</button>
             </div>
             <div id="wordGrid" class="word-grid"></div>
             <div id="emptyWords" class="empty-state" style="display: none;">
                 <div class="empty-state-icon">📝</div>
-                <div>Henüz kelime eklenmemiş! ✨<br>Yeni kelime eklemek için butona basın!</div>
+                <div>Henüz kelime eklenmemiş!</div>
             </div>
         </div>
     </div>
@@ -654,12 +518,12 @@
             <div class="form-group">
                 <label>Renk Seç:</label>
                 <div class="color-picker">
-                    <div class="color-option selected" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #FFE66D 0%, #FFD93D 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #FFE66D 0%, #FFD93D 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #95E1D3 0%, #38ADA9 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #95E1D3 0%, #38ADA9 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #F38181 0%, #AA96DA 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #F38181 0%, #AA96DA 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%)')"></div>
+                    <div class="color-option selected" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)')"></div>
                 </div>
             </div>
             <div class="modal-buttons">
@@ -691,9 +555,8 @@
     <script>
         let currentPerson = null;
         let currentCategory = null;
-        let selectedColor = 'linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%)';
+        let selectedColor = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
 
-        // Initialize
         function init() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -701,7 +564,6 @@
             renderPersons();
         }
 
-        // Data Management
         function getData() {
             return JSON.parse(localStorage.getItem('konusuyorum') || '{"persons":[]}');
         }
@@ -710,7 +572,6 @@
             localStorage.setItem('konusuyorum', JSON.stringify(data));
         }
 
-        // Person Functions
         function renderPersons() {
             const data = getData();
             const grid = document.getElementById('personGrid');
@@ -727,7 +588,7 @@
 
             data.persons.forEach((person, idx) => {
                 const card = document.createElement('div');
-                card.className = 'person-card';
+                card.className = 'card person';
                 card.innerHTML = `
                     <div>${person.name}</div>
                     <button class="delete-btn" onclick="deletePerson(${idx})">🗑️ Sil</button>
@@ -742,7 +603,6 @@
         }
 
         function selectPerson(idx) {
-            const data = getData();
             currentPerson = idx;
             showScreen('categoryScreen');
             renderCategories();
@@ -777,7 +637,6 @@
             renderPersons();
         }
 
-        // Category Functions
         function renderCategories() {
             const data = getData();
             const person = data.persons[currentPerson];
@@ -795,7 +654,7 @@
 
             person.categories.forEach((cat, idx) => {
                 const card = document.createElement('div');
-                card.className = 'category-card';
+                card.className = 'card category';
                 card.style.background = cat.color;
                 card.innerHTML = `
                     <div>${cat.name}</div>
@@ -827,7 +686,7 @@
 
         function openCategoryModal() {
             document.getElementById('categoryName').value = '';
-            selectedColor = 'linear-gradient(135deg, #FF6B6B 0%, #FF8E72 100%)';
+            selectedColor = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
             document.querySelectorAll('.color-option').forEach((el, idx) => {
                 el.classList.toggle('selected', idx === 0);
             });
@@ -859,7 +718,6 @@
             renderCategories();
         }
 
-        // Word Functions
         function renderWords() {
             const data = getData();
             const category = data.persons[currentPerson].categories[currentCategory];
@@ -879,10 +737,14 @@
                 const card = document.createElement('div');
                 card.className = 'word-card';
                 card.innerHTML = `
-                    <div class="word-text">${word.text}</div>
-                    ${word.image ? `<img src="${word.image}" class="word-image">` : ''}
-                    <button class="speak-btn" onclick="speakWord('${word.text.replace(/'/g, "\\'")}')">🔊 Oku</button>
-                    <button class="delete-btn" onclick="deleteWord(${idx})">🗑️ Sil</button>
+                    <div>
+                        <div class="word-text">${word.text}</div>
+                        ${word.image ? `<img src="${word.image}" class="word-image">` : ''}
+                    </div>
+                    <div>
+                        <button class="speak-btn" onclick="speakWord('${word.text.replace(/'/g, "\\'")}')">🔊 Oku</button>
+                        <button class="delete-btn" onclick="deleteWord(${idx})">🗑️ Sil</button>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
@@ -944,7 +806,6 @@
             renderWords();
         }
 
-        // Navigation
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
@@ -964,14 +825,12 @@
             document.getElementById(modalId).classList.remove('active');
         }
 
-        // Close modal on outside click
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
                 e.target.classList.remove('active');
             }
         });
 
-        // Initialize on load
         window.addEventListener('load', init);
     </script>
 </body>
