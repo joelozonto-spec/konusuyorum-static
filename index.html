@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#1976d2">
     <title>Konuşuyorum 🎤</title>
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,31 +14,44 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 15px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
             color: #333;
+            overflow-x: hidden;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .app-header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin: 30px 0;
-            font-size: 3em;
-            font-weight: 800;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            padding: 20px;
         }
 
         .screen {
             display: none;
-            animation: fadeIn 0.4s ease-in;
+            animation: fadeIn 0.3s ease;
         }
 
         .screen.active {
@@ -46,178 +59,234 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Grid Layouts */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
         }
 
-        .card {
+        .toolbar-back {
             background: white;
-            border-radius: 20px;
-            padding: 25px;
+            border: 1px solid #e0e0e0;
+            color: #1976d2;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-back:hover {
+            background: #f5f5f5;
+            border-color: #1976d2;
+        }
+
+        .toolbar-back:active {
+            transform: scale(0.98);
+        }
+
+        /* Grid */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            border: 3px solid transparent;
-            min-height: 140px;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-weight: 700;
-            font-size: 1.1em;
+            gap: 8px;
+            font-weight: 600;
+            color: #333;
         }
 
-        .card:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        .item-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+            border-color: #1976d2;
         }
 
-        .card:active {
+        .item-card:active {
+            transform: scale(0.98);
+        }
+
+        .item-card.person {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
+            border: none;
+        }
+
+        .item-card.category {
+            background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
+            color: white;
+            border: none;
+        }
+
+        .item-delete {
+            background: #ffebee;
+            color: #d32f2f;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            margin-top: 8px;
+        }
+
+        .item-delete:hover {
+            background: #ffcdd2;
+        }
+
+        .item-delete:active {
             transform: scale(0.95);
         }
 
-        .card.person {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: #667eea;
+        /* Words Grid */
+        .words-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
-        .card.category {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border-color: #f5576c;
-        }
-
-        .card.word {
+        .word-card {
             background: white;
-            border: 3px solid #667eea;
-            color: #333;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: all 0.2s;
+            min-height: 240px;
+        }
+
+        .word-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+            border-color: #1976d2;
+        }
+
+        .word-text {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #1976d2;
+            word-break: break-word;
+            line-height: 1.4;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
         .word-image {
             width: 100%;
             height: 100px;
             object-fit: cover;
-            border-radius: 12px;
-            margin: 10px 0;
-            border: 2px solid #667eea;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
         }
 
-        .word-text {
-            font-size: 1.3em;
-            font-weight: 800;
-            color: #667eea;
-            margin: 10px 0;
-            word-break: break-word;
-            line-height: 1.3;
-        }
-
-        .word-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .word-card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            border: 3px solid #667eea;
-            min-height: 280px;
+        .word-actions {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.3s ease;
+            gap: 8px;
         }
 
-        .word-card:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        .speak-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .speak-btn:hover {
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+            transform: translateY(-2px);
+        }
+
+        .speak-btn:active {
+            transform: scale(0.98);
         }
 
         /* Buttons */
         .button-group {
             display: flex;
-            gap: 15px;
-            margin: 25px 0;
+            gap: 12px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
         }
 
         .btn {
-            flex: 1;
-            min-width: 140px;
-            padding: 16px 24px;
-            font-size: 1.1em;
-            font-weight: 700;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: 600;
             border: none;
-            border-radius: 15px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        .btn:active {
-            transform: scale(0.95);
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
+            color: white;
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .speak-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
             color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-size: 1em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-            font-family: 'Poppins', sans-serif;
-            margin-top: 10px;
         }
 
-        .speak-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        .btn:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
         }
 
-        .speak-btn:active {
-            transform: scale(0.95);
+        .btn:active {
+            transform: scale(0.98);
         }
 
         /* Modal */
@@ -229,9 +298,9 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s ease;
-            backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
         }
 
         .modal.active {
@@ -242,66 +311,57 @@
 
         .modal-content {
             background: white;
-            padding: 40px;
-            border-radius: 25px;
+            border-radius: 12px;
+            padding: 32px;
             max-width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            border: 3px solid #667eea;
-            animation: slideUp 0.4s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease;
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .modal-header {
-            font-size: 2em;
-            font-weight: 800;
-            margin-bottom: 30px;
-            color: #667eea;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1976d2;
         }
 
         .form-group {
-            margin: 20px 0;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
         }
 
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 14px;
-            border: 3px solid #667eea;
-            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 1em;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
         }
 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #f5576c;
-            box-shadow: 0 0 0 3px rgba(245,87,108,0.1);
-            transform: scale(1.01);
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25,118,210,0.1);
         }
 
         .form-group textarea {
@@ -316,178 +376,141 @@
         }
 
         .color-option {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            border: 4px solid transparent;
+            width: 56px;
+            height: 56px;
+            border-radius: 8px;
+            border: 3px solid transparent;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .color-option.selected {
             border-color: #333;
-            transform: scale(1.15);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .modal-buttons {
             display: flex;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 12px;
+            margin-top: 28px;
         }
 
         .modal-buttons button {
             flex: 1;
         }
 
-        .back-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            padding: 14px 24px;
-            font-size: 1.1em;
-            font-weight: 700;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .back-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        .back-btn:active {
-            transform: scale(0.95);
-        }
-
-        .delete-btn {
-            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 8px 14px;
-            font-size: 0.95em;
-            cursor: pointer;
-            margin-top: 8px;
-            font-weight: 700;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .delete-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-        }
-
-        .delete-btn:active {
-            transform: scale(0.95);
-        }
-
+        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: white;
-            font-size: 1.3em;
-            font-weight: 700;
+            color: #999;
         }
 
         .empty-state-icon {
-            font-size: 5em;
-            margin-bottom: 20px;
+            font-size: 4em;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-text {
+            font-size: 1.1em;
+            font-weight: 500;
         }
 
         @media (max-width: 600px) {
-            .header {
-                font-size: 2em;
-                margin: 20px 0;
+            .app-header h1 {
+                font-size: 1.5em;
             }
 
-            .grid {
+            .container {
+                padding: 12px;
+            }
+
+            .items-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-                margin: 20px 0;
+                gap: 12px;
             }
 
-            .word-grid {
+            .words-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-
-            .btn {
-                min-width: 100px;
-                padding: 12px 16px;
-                font-size: 1em;
+                gap: 12px;
             }
 
             .modal-content {
-                padding: 25px;
-                border-radius: 15px;
+                padding: 20px;
+                max-width: 95%;
             }
 
             .modal-header {
-                font-size: 1.6em;
+                font-size: 1.4em;
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 0.95em;
             }
         }
 
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f5f5;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-radius: 5px;
+            background: #bdbdbd;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9e9e9e;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">🎤 Konuşuyorum</div>
+    <div class="app-header">
+        <h1>🎤 Konuşuyorum</h1>
+    </div>
 
+    <div class="container">
         <!-- Person Screen -->
         <div id="personScreen" class="screen active">
             <div class="button-group">
-                <button class="btn btn-success" onclick="openPersonModal()">➕ Yeni Kişi</button>
+                <button class="btn btn-success" onclick="openPersonModal()">➕ Yeni Kişi Ekle</button>
             </div>
-            <div id="personGrid" class="grid"></div>
+            <div id="personGrid" class="items-grid"></div>
             <div id="emptyPersons" class="empty-state" style="display: none;">
                 <div class="empty-state-icon">👤</div>
-                <div>Henüz kişi eklenmemiş!</div>
+                <div class="empty-state-text">Henüz kişi eklenmemiş. Yeni kişi eklemek için butona basın.</div>
             </div>
         </div>
 
         <!-- Category Screen -->
         <div id="categoryScreen" class="screen">
-            <button class="back-btn" onclick="goToPerson()">⬅️ Geri</button>
+            <button class="toolbar-back" onclick="goToPerson()">⬅️ Geri Dön</button>
             <div class="button-group">
                 <button class="btn btn-success" onclick="openCategoryModal()">➕ Kategori Ekle</button>
             </div>
-            <div id="categoryGrid" class="grid"></div>
+            <div id="categoryGrid" class="items-grid"></div>
             <div id="emptyCategories" class="empty-state" style="display: none;">
                 <div class="empty-state-icon">📂</div>
-                <div>Henüz kategori eklenmemiş!</div>
+                <div class="empty-state-text">Henüz kategori eklenmemiş. Yeni kategori eklemek için butona basın.</div>
             </div>
         </div>
 
         <!-- Word Screen -->
         <div id="wordScreen" class="screen">
-            <button class="back-btn" onclick="goToCategory()">⬅️ Geri</button>
+            <button class="toolbar-back" onclick="goToCategory()">⬅️ Geri Dön</button>
             <div class="button-group">
-                <button class="btn btn-success" onclick="openWordModal()">➕ Kelime Ekle</button>
+                <button class="btn btn-success" onclick="openWordModal()">➕ Kelime/Cümle Ekle</button>
             </div>
-            <div id="wordGrid" class="word-grid"></div>
+            <div id="wordGrid" class="words-grid"></div>
             <div id="emptyWords" class="empty-state" style="display: none;">
                 <div class="empty-state-icon">📝</div>
-                <div>Henüz kelime eklenmemiş!</div>
+                <div class="empty-state-text">Henüz kelime eklenmemiş. Yeni kelime eklemek için butona basın.</div>
             </div>
         </div>
     </div>
@@ -518,12 +541,12 @@
             <div class="form-group">
                 <label>Renk Seç:</label>
                 <div class="color-picker">
-                    <div class="color-option selected" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)')"></div>
+                    <div class="color-option selected" style="background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #388e3c 0%, #2e7d32 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #f57c00 0%, #e65100 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #c2185b 0%, #ad1457 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #c2185b 0%, #ad1457 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%)')"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #00796b 0%, #004d40 100%);" onclick="selectColor(this, 'linear-gradient(135deg, #00796b 0%, #004d40 100%)')"></div>
                 </div>
             </div>
             <div class="modal-buttons">
@@ -555,7 +578,7 @@
     <script>
         let currentPerson = null;
         let currentCategory = null;
-        let selectedColor = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        let selectedColor = 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)';
 
         function init() {
             if ('serviceWorker' in navigator) {
@@ -588,13 +611,13 @@
 
             data.persons.forEach((person, idx) => {
                 const card = document.createElement('div');
-                card.className = 'card person';
+                card.className = 'item-card person';
                 card.innerHTML = `
                     <div>${person.name}</div>
-                    <button class="delete-btn" onclick="deletePerson(${idx})">🗑️ Sil</button>
+                    <button class="item-delete" onclick="deletePerson(${idx})">🗑️ Sil</button>
                 `;
                 card.onclick = (e) => {
-                    if (e.target.className !== 'delete-btn') {
+                    if (e.target.className !== 'item-delete') {
                         selectPerson(idx);
                     }
                 };
@@ -654,14 +677,14 @@
 
             person.categories.forEach((cat, idx) => {
                 const card = document.createElement('div');
-                card.className = 'card category';
+                card.className = 'item-card category';
                 card.style.background = cat.color;
                 card.innerHTML = `
                     <div>${cat.name}</div>
-                    <button class="delete-btn" onclick="deleteCategory(${idx})">🗑️ Sil</button>
+                    <button class="item-delete" onclick="deleteCategory(${idx})">🗑️ Sil</button>
                 `;
                 card.onclick = (e) => {
-                    if (e.target.className !== 'delete-btn') {
+                    if (e.target.className !== 'item-delete') {
                         selectCategory(idx);
                     }
                 };
@@ -686,7 +709,7 @@
 
         function openCategoryModal() {
             document.getElementById('categoryName').value = '';
-            selectedColor = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            selectedColor = 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)';
             document.querySelectorAll('.color-option').forEach((el, idx) => {
                 el.classList.toggle('selected', idx === 0);
             });
@@ -737,13 +760,11 @@
                 const card = document.createElement('div');
                 card.className = 'word-card';
                 card.innerHTML = `
-                    <div>
-                        <div class="word-text">${word.text}</div>
-                        ${word.image ? `<img src="${word.image}" class="word-image">` : ''}
-                    </div>
-                    <div>
+                    <div class="word-text">${word.text}</div>
+                    ${word.image ? `<img src="${word.image}" class="word-image">` : ''}
+                    <div class="word-actions">
                         <button class="speak-btn" onclick="speakWord('${word.text.replace(/'/g, "\\'")}')">🔊 Oku</button>
-                        <button class="delete-btn" onclick="deleteWord(${idx})">🗑️ Sil</button>
+                        <button class="item-delete" onclick="deleteWord(${idx})">🗑️ Sil</button>
                     </div>
                 `;
                 grid.appendChild(card);
